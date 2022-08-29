@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Додати солдата</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+</head>
+
+<body>
+<nav class="navbar navbar-expand-md bg-light navbar-light">
+    <!-- Brand -->
+    <a class="navbar-brand" href="#">Система управління солдатами</a>
+
+    <!-- Toggler/collapsibe Button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/}">Список активних солдатів</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/edit}">Створення нового солдата</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container my-5">
+    <h3>Додати солдата</h3>
+    <div class="card">
+        <div class="card-body">
+            <div class="col-md-10">
+                <form action="#" th:action="@{/createSoldier}" th:object="${soldier}"
+                      method="post">
+                    <div class="row">
+                        <div class="form-group col-md-8">
+                            <label for="name" class="col-form-label">Прізвище Імя По батькові</label>
+                            <input type="text" th:field="*{fullName}" class="form-control"
+                                   id="fullName" placeholder="Повне імя" />
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="name" class="col-form-label">Відпустка</label>
+                            <input type="text" th:field="*{vacation}" class="form-control"
+                                   id="vacation" placeholder="" />
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="name" class="col-form-label">Госпіталь</label>
+                            <input type="text" th:field="*{hospital}" class="form-control"
+                                   id="hospital" placeholder="" />
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="name" class="col-form-label">Рік народження</label>
+                            <input type="text" th:field="*{dateOfBirth}" class="form-control"
+                                   id="dateOfBirth" placeholder="" />
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="name" class="col-form-label">Номер телефону</label>
+                            <input type="text" th:field="*{phoneNumber}" class="form-control"
+                                   id="phoneNumber" placeholder="" />
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="name" class="col-form-label">Корпус БАТ</label>
+                            <input type="text" th:field="*{battalion}" class="form-control"
+                                   id="battalion" placeholder="" />
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="name" class="col-form-label">Посада за штатним розкладом</label>
+                            <input type="text" th:field="*{fullTimePosition}" class="form-control"
+                                   id="fullTimePosition" placeholder="" />
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="name" class="col-form-label">Військове звання фактично</label>
+                            <input type="text" th:field="*{militaryRankName}" class="form-control"
+                                   id="militaryRankName" placeholder="" />
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="name" class="col-form-label">Військова лікарська комісія</label>
+                            <input type="text" th:field="*{militaryMedicalCommission}" class="form-control"
+                                   id="militaryMedicalCommission" placeholder="" />
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="name" class="col-form-label">Особистий номер</label>
+                            <input type="text" th:field="*{personalIdNumber}" class="form-control"
+                                   id="personalIdNumber" placeholder="" />
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="name" class="col-form-label">Дата прибуття</label>
+                            <input type="text" th:field="*{dateOfArrival}" class="form-control"
+                                   id="dateOfArrival" placeholder="" />
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="name" class="col-form-label">Номер наказу на зарахування</label>
+                            <input type="text" th:field="*{enrollmentOrderNumber}" class="form-control"
+                                   id="enrollmentOrderNumber" placeholder="" />
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="name" class="col-form-label">З якої бригади прибув</label>
+                            <input type="text" th:field="*{originBrigadeArrival}" class="form-control"
+                                   id="originBrigadeArrival" placeholder="" />
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="name" class="col-form-label">Внутрішній наказ</label>
+                            <input type="text" th:field="*{internalOrder}" class="form-control"
+                                   id="internalOrder" placeholder="" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <input type="submit" class="btn btn-primary" value=" Зберегти ">
+                        </div>
+
+                        <input type="hidden" id="id" th:field="*{id}">
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

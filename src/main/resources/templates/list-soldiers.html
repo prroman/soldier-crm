@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Список солдатів</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body>
+<script th:inline="javascript">
+    function myFunction() {
+
+    const militaryMedicalCommissionOptions = ["REQUIRE", "AWAITING", "INPROGRESS", "FINISHED"];
+    const originBrigadeArrivalOptions = ["111", "112", "113", "114"];
+
+    var selectFilterByValue = document.getElementById("selectFilterBy").value;
+    if (selectFilterByValue === 'militaryMedicalCommission') {
+      populateKeywordSelectOptions(militaryMedicalCommissionOptions);
+    } else if (selectFilterByValue === 'originBrigadeArrival') {
+      populateKeywordSelectOptions(originBrigadeArrivalOptions);
+    }
+  }
+
+  function handleFormSubmit(form) {
+    //form.submit();
+  }
+
+  function populateKeywordSelectOptions(options) {
+    $("#keywordSelect").empty();
+    for (let i = 0; i < options.length; i++) {
+      $('#keywordSelect').append($('<option>',
+              {
+                value: options[i],
+                text : options[i]
+              }));
+    }
+  }
+
+  function logChange() {
+    console.log(document.getElementById("selectFilterBy"));
+    let obj = document.getElementById("keywordSelect");
+    console.log(obj);
+  }
+</script>
+
+<nav class="navbar navbar-expand-md bg-light navbar-light">
+  <!-- Brand -->
+  <a class="navbar-brand" href="#">Система управління солдатами</a>
+
+  <!-- Toggler/collapsibe Button -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Navbar links -->
+  <div class="collapse navbar-collapse" id="collapsibleNavbar">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/}">Список активних солдатів</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/edit}">Створення нового солдата</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+      <div th:switch="${soldiers}">
+        <div class="col-md-10">
+          <h2 th:case="null">No record found !!</h2>
+          <div th:case="*">
+            <div style="width: 1250px; margin: 0 auto;">
+              <h3>Список солдатів</h3>
+              <br/>
+              <table class="table table-striped table-bordered center">
+              <thead class="thead-dark">
+              <tr>
+                <th>Прізвище Імя По батькові</th>
+                <th>Відпустка</th>
+                <th>Госпіталь</th>
+                <th>Рік народження</th>
+                <th>Номер телефону</th>
+                <th>Корпус БАТ</th>
+                <th>Посада за штатним розкладом</th>
+                <th>Військове звання фактично</th>
+                <th>Військова лікарська комісія</th>
+                <th>Особистий номер</th>
+                <th>Дата прибуття</th>
+                <th>Номер наказу на зарахування</th>
+                <th>З якої бригади прибув</th>
+                <th>Внутрішній наказ</th>
+                <th>Дії</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="soldier: ${soldiers}">
+                <td th:text="${soldier.fullName}"></td>
+                <td th:text="${soldier.vacation}"></td>
+                <td th:text="${soldier.hospital}"></td>
+                <td th:text="${soldier.dateOfBirth}"></td>
+                <td th:text="${soldier.phoneNumber}"></td>
+                <td th:text="${soldier.battalion}"></td>
+                <td th:text="${soldier.fullTimePosition}"></td>
+                <td th:text="${soldier.militaryRankName}"></td>
+                <td th:text="${soldier.militaryMedicalCommission}"></td>
+                <td th:text="${soldier.personalIdNumber}"></td>
+                <td th:text="${soldier.dateOfArrival}"></td>
+                <td th:text="${soldier.enrollmentOrderNumber}"></td>
+                <td th:text="${soldier.originBrigadeArrival}"></td>
+                <td th:text="${soldier.internalOrder}"></td>
+                <td>
+                  <a th:href="@{/edit/{id}(id=${soldier.id})}" class="btn btn-primary btn-sm">Редагувати</a>
+                  <a th:href="@{/delete/{id}(id=${soldier.id})}" class="btn btn-danger btn-sm">Видалити</a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+              <form th:action= "@{/}" method="post" onsubmit="handleFormSubmit(this)">
+                <select id="selectFilterBy" onchange="myFunction()" name="filterBy">
+                  <option value="none" selected disabled hidden>Виберіть критерій фільтру . . . </option>
+                  <option value="militaryMedicalCommission" name="militaryMedicalCommission">Військова лікарська комісія</option>
+                  <option value="originBrigadeArrival" name="originBrigadeArrival">З якої бригади прибув</option>
+                </select>
+                <select id="keywordSelect" name="keyword" onchange="logChange()">
+                  <option value="none" selected disabled hidden>Виберіть критерій фільтру . . . </option>
+                </select>
+                <button type="submit">Фільтрувати</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+</body>
+</html>
