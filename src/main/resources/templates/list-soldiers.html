@@ -8,43 +8,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+  <link th:href="@{/css/main.css}" rel="stylesheet" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
 <body>
 <script th:inline="javascript">
-    function myFunction() {
-
-    const militaryMedicalCommissionOptions = ["REQUIRE", "AWAITING", "INPROGRESS", "FINISHED"];
-    const originBrigadeArrivalOptions = ["111", "112", "113", "114"];
-
-    var selectFilterByValue = document.getElementById("selectFilterBy").value;
-    if (selectFilterByValue === 'militaryMedicalCommission') {
-      populateKeywordSelectOptions(militaryMedicalCommissionOptions);
-    } else if (selectFilterByValue === 'originBrigadeArrival') {
-      populateKeywordSelectOptions(originBrigadeArrivalOptions);
+  function processFilterData() {
+    const filterControlsId = ["fillNameFilterInput", "vacationFilterInput", "hospitalFilterId", "filterRankSelect"];
+    let newResult = [];
+    for (let i = 0; i < filterControlsId.length; i++) {
+      var input = document.getElementById(filterControlsId[i]);
+      var obj = {};
+      obj[filterControlsId[i]] = input.value;
+      newResult.push(obj);
     }
-  }
-
-  function handleFormSubmit(form) {
-    //form.submit();
-  }
-
-  function populateKeywordSelectOptions(options) {
-    $("#keywordSelect").empty();
-    for (let i = 0; i < options.length; i++) {
-      $('#keywordSelect').append($('<option>',
-              {
-                value: options[i],
-                text : options[i]
-              }));
-    }
-  }
-
-  function logChange() {
-    console.log(document.getElementById("selectFilterBy"));
-    let obj = document.getElementById("keywordSelect");
-    console.log(obj);
+    console.log(newResult);
   }
 </script>
 
@@ -95,6 +74,27 @@
                 <th>Внутрішній наказ</th>
                 <th>Дії</th>
               </tr>
+              <tr>
+                <th><input type="text" id="fillNameFilterInput" width="50"/></th>
+                <th><input type="text" id="vacationFilterInput"/></th>
+                <th><input type="text" id="hospitalFilterId"/></th>
+                <th><input type="text"/></th>
+                <th><input type="text"/></th>
+                <th><input type="text"/></th>
+                <th><input type="text"/></th>
+                <th><select id="filterRankSelect">
+                  <option value="militaryMedicalCommission" name="militaryMedicalCommission">REQUIRED</option>
+                </select></th>
+                <th><select id="filterMilitaryMedicalCommissionSelect">
+                  <option value="militaryMedicalCommission" name="militaryMedicalCommission">REQUIRED</option>
+                </select></th>
+                <th><input type="text"/></th>
+                <th><input type="text"/></th>
+                <th><input type="text"/></th>
+                <th><input type="text"/></th>
+                <th><input type="text"/></th>
+                <th><button onclick="processFilterData()">Фільтрувати</button></th>
+              </tr>
               </thead>
               <tbody>
               <tr th:each="soldier: ${soldiers}">
@@ -119,17 +119,6 @@
               </tr>
               </tbody>
             </table>
-              <form th:action= "@{/}" method="post" onsubmit="handleFormSubmit(this)">
-                <select id="selectFilterBy" onchange="myFunction()" name="filterBy">
-                  <option value="none" selected disabled hidden>Виберіть критерій фільтру . . . </option>
-                  <option value="militaryMedicalCommission" name="militaryMedicalCommission">Військова лікарська комісія</option>
-                  <option value="originBrigadeArrival" name="originBrigadeArrival">З якої бригади прибув</option>
-                </select>
-                <select id="keywordSelect" name="keyword" onchange="logChange()">
-                  <option value="none" selected disabled hidden>Виберіть критерій фільтру . . . </option>
-                </select>
-                <button type="submit">Фільтрувати</button>
-              </form>
             </div>
           </div>
         </div>
