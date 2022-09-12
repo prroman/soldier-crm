@@ -1,7 +1,7 @@
 package com.rpr.soldierscrm.service;
 
 import com.rpr.soldierscrm.entity.Soldier;
-import com.rpr.soldierscrm.exception.RecordNotFoundException;
+import com.rpr.soldierscrm.exception.SoldierNotFoundException;
 import com.rpr.soldierscrm.repository.SoldierRepository;
 import org.springframework.stereotype.Service;
 
@@ -57,23 +57,12 @@ public class SoldierService {
         }
     }
 
-    public void deleteSoldierById(Long id) throws RecordNotFoundException {
+    public void deleteSoldierById(Long id) throws SoldierNotFoundException {
         Optional<Soldier> soldier = soldierRepository.findById(id);
         if (soldier.isPresent()) {
             soldierRepository.deleteById(id);
         } else {
-            throw new RecordNotFoundException("No soldier record exist for given id");
+            throw new SoldierNotFoundException("No soldier record exist for given id");
         }
-    }
-
-    public List<Soldier> getSoldiersFilteredBy(String filteredBy, String keyword) {
-        if (filteredBy.equalsIgnoreCase("militaryMedicalCommission")) {
-            return soldierRepository.findByMilitaryMedicalCommissionContaining(keyword);
-        } else if (filteredBy.equalsIgnoreCase("originBrigadeArrival")) {
-            return soldierRepository.findByOriginBrigadeArrivalContaining(keyword);
-        } else {
-            soldierRepository.findAll();
-        }
-        return null;
     }
 }

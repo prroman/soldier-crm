@@ -1,7 +1,7 @@
 package com.rpr.soldierscrm.controller;
 
 import com.rpr.soldierscrm.entity.Soldier;
-import com.rpr.soldierscrm.exception.RecordNotFoundException;
+import com.rpr.soldierscrm.exception.SoldierNotFoundException;
 import com.rpr.soldierscrm.service.SoldierService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,26 +16,19 @@ import java.util.Optional;
 public class SoldierController {
 
     private final SoldierService soldierService;
-    private Object[] militaryMedicalCommissionOptions = {"REQUIRE", "AWAITING", "INPROGRESS", "FINISHED"};
 
     public SoldierController(SoldierService soldierService) {
         this.soldierService = soldierService;
     }
 
     @RequestMapping
-    public String getAllSoldiers(Model model, String filterBy, String keyword) {
-        if (keyword != null && filterBy != null) {
-            model.addAttribute("soldiers", soldierService.getSoldiersFilteredBy(filterBy, keyword));
-            model.addAttribute("militaryMedicalCommissionOptions", militaryMedicalCommissionOptions);
-        } else {
-            model.addAttribute("soldiers", soldierService.getAllSoldiers());
-            model.addAttribute("militaryMedicalCommissionOptions", militaryMedicalCommissionOptions);
-        }
+    public String getAllSoldiers(Model model) {
+        model.addAttribute("soldiers", soldierService.getAllSoldiers());
         return "list-soldiers";
     }
 
     @RequestMapping(path = {"/edit", "/edit/{id}"})
-    public String editSoldierById(Model model, @PathVariable("id") Optional<Long> id) throws RecordNotFoundException {
+    public String editSoldierById(Model model, @PathVariable("id") Optional<Long> id) throws SoldierNotFoundException {
         if (id.isPresent()) {
             Soldier entity = soldierService.getSoldierById(id.get());
             model.addAttribute("soldier", entity);
@@ -46,7 +39,7 @@ public class SoldierController {
     }
 
     @RequestMapping(path = "/delete/{id}")
-    public String deleteEmployeeById(Model model, @PathVariable("id") Long id) throws RecordNotFoundException {
+    public String deleteEmployeeById(Model model, @PathVariable("id") Long id) throws SoldierNotFoundException {
         soldierService.deleteSoldierById(id);
         return "redirect:/";
     }

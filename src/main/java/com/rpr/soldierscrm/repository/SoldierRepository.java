@@ -11,9 +11,4 @@ import java.util.List;
 @Repository
 public interface SoldierRepository extends JpaRepository<Soldier, Long> {
 
-    @Query(value = "select * from soldiers s where military_medical_commission like %:keyword% ", nativeQuery = true)
-    List<Soldier> findByMilitaryMedicalCommissionContaining(@Param("keyword") String keyword);
-
-    @Query(value = "select * from soldiers s where origin_brigade_arrival like %:keyword% ", nativeQuery = true)
-    List<Soldier> findByOriginBrigadeArrivalContaining(@Param("keyword") String keyword);
 }

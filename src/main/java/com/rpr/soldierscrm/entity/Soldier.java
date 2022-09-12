@@ -3,9 +3,11 @@ package com.rpr.soldierscrm.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "soldiers")
@@ -23,7 +25,7 @@ public class Soldier {
     @Column
     private String hospital; // Госпіталь
     @Column
-    private LocalDate dateOfBirth; // Рік народження
+    private Integer dateOfBirth; // Рік народження
     @Column
     private String phoneNumber; // Номер телефона
     @Column
@@ -38,15 +40,12 @@ public class Soldier {
     @Column
     private String personalIdNumber;  // Особистий номер
     @Column
-    private LocalDate dateOfArrival;  // Прибув дата
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date dateOfArrival;  // Прибув дата
     @Column
     private String enrollmentOrderNumber;  // Номер Наказу на зарахування
     @Column
     private String originBrigadeArrival;  // з якої бригади прибув
     @Column
     private String internalOrder;  // Внутрінній наказ
-}
-
-enum MilitaryMedicalCommission {
-    REQUIRE, AWAITING, INPROGRESS, FINISHED
 }
