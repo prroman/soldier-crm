@@ -1,3 +1,4 @@
+/*
 package com.rpr.soldierscrm.repository;
 
 import com.rpr.soldierscrm.entity.Soldier;
@@ -14,3 +15,4 @@ public interface SoldierRepository extends JpaRepository<Soldier, Long> {
 
 
 }
+*/

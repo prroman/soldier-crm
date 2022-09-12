@@ -2,7 +2,6 @@ package com.rpr.soldierscrm.controller;
 
 import com.rpr.soldierscrm.entity.Soldier;
 import com.rpr.soldierscrm.exception.SoldierNotFoundException;
-import com.rpr.soldierscrm.service.SoldierService;
 import com.rpr.soldierscrm.service.SoldierServiceLocal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
