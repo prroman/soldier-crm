@@ -1,4 +1,3 @@
-/*
 package com.rpr.soldierscrm.service;
 
 import com.rpr.soldierscrm.entity.Soldier;
@@ -67,4 +66,3 @@ public class SoldierService {
         }
     }
 }
-*/

@@ -2,7 +2,7 @@ package com.rpr.soldierscrm.controller;
 
 import com.rpr.soldierscrm.entity.Soldier;
 import com.rpr.soldierscrm.exception.SoldierNotFoundException;
-import com.rpr.soldierscrm.service.SoldierServiceLocal;
+import com.rpr.soldierscrm.service.SoldierService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,9 +15,9 @@ import java.util.Optional;
 @RequestMapping("/")
 public class SoldierController {
 
-    private final SoldierServiceLocal soldierService;
+    private final SoldierService soldierService;
 
-    public SoldierController(SoldierServiceLocal soldierService) {
+    public SoldierController(SoldierService soldierService) {
         this.soldierService = soldierService;
     }
 

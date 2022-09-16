@@ -63,7 +63,7 @@ function filter_rows() {
     let filter_value_dict = {};
     allFilters.forEach(filter => {
         let col_index = filter.parentElement.getAttribute('col-index');
-        let value = filter.value;
+        let value = filter.value.toLowerCase();
         if (value !== "all") {
             filter_value_dict[col_index] = value;
         }
@@ -78,8 +78,8 @@ function filter_rows() {
         });
         for (let col_i in filter_value_dict) {
             let filter_value = filter_value_dict[col_i];
-            let row_cell_value = col_cell_value_dict[col_i];
-            if (row_cell_value.indexOf(filter_value) === -1 && filter_value !== "all") {
+            let row_cell_value = col_cell_value_dict[col_i].toLowerCase();
+            if (!row_cell_value.includes(filter_value) && filter_value !== "all") {
                 display_row = false;
                 break;
             }
