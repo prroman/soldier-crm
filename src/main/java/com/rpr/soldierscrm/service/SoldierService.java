@@ -1,10 +1,14 @@
 package com.rpr.soldierscrm.service;
 
+import com.rpr.soldierscrm.entity.Attachment;
 import com.rpr.soldierscrm.entity.Soldier;
 import com.rpr.soldierscrm.exception.SoldierNotFoundException;
+import com.rpr.soldierscrm.repository.AttachmentRepository;
 import com.rpr.soldierscrm.repository.SoldierRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,9 +16,11 @@ import java.util.Optional;
 public class SoldierService {
 
     private final SoldierRepository soldierRepository;
+    private final AttachmentRepository attachmentRepository;
 
-    public SoldierService(SoldierRepository soldierRepository) {
+    public SoldierService(SoldierRepository soldierRepository, AttachmentRepository attachmentRepository) {
         this.soldierRepository = soldierRepository;
+        this.attachmentRepository = attachmentRepository;
     }
 
     public Soldier getSoldierById(Long id) {
@@ -26,7 +32,7 @@ public class SoldierService {
         return soldierRepository.findAll();
     }
 
-    public Soldier createOrUpdateSoldier(Soldier soldier) {
+    public Soldier createOrUpdateSoldier(Soldier soldier, MultipartFile file) {
         if (soldier.getId()  == null) {
                 soldier = soldierRepository.save(soldier);
                 return soldier;
@@ -48,6 +54,20 @@ public class SoldierService {
                     newSoldier.setEnrollmentOrderNumber(soldier.getEnrollmentOrderNumber());
                     newSoldier.setOriginBrigadeArrival(soldier.getOriginBrigadeArrival());
                     newSoldier.setInternalOrder(soldier.getInternalOrder());
+
+                    if (file != null) {
+                        try {
+                            Attachment attachment = new Attachment();
+                            attachment.setName(file.getOriginalFilename());
+                            attachment.setType(file.getContentType());
+                            attachment.setData(file.getBytes());
+                            attachmentRepository.save(attachment);
+                            newSoldier.addAttachment(attachment);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                     newSoldier = soldierRepository.save(newSoldier);
                     return newSoldier;
                 } else {

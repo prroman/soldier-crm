@@ -8,7 +8,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -51,4 +53,12 @@ public class Soldier {
     private String originBrigadeArrival;  // з якої бригади прибув
     @Column
     private String internalOrder;  // Внутрінній наказ
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "soldier_id")
+    private List<Attachment> attachments = new ArrayList<>();
+
+    public void addAttachment(Attachment attachment) {
+        this.attachments.add(attachment);
+    }
 }

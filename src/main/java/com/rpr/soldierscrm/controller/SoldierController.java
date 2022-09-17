@@ -46,7 +46,7 @@ public class SoldierController {
 
     @RequestMapping(path = "/createSoldier", method = RequestMethod.POST)
     public String createOrUpdateSoldier(Soldier soldier) {
-        soldierService.createOrUpdateSoldier(soldier);
+        soldierService.createOrUpdateSoldier(soldier, null);
         return "redirect:/";
     }
 }
