@@ -1,13 +1,13 @@
 package com.rpr.soldierscrm.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Cleanup;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,12 +24,14 @@ public class Soldier {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
+    @NotEmpty(message = "Прізвище Імя По батькові не може бути пустим")
     private String fullName; // Прізвище Імя По батькові
     @Column
     private String vacation; // Відпустка
     @Column
     private String hospital; // Госпіталь
     @Column
+    @NotNull(message = "Дата народження не може бути пустою")
     private Integer dateOfBirth; // Рік народження
     @Column
     private String phoneNumber; // Номер телефона
@@ -45,6 +47,7 @@ public class Soldier {
     @Column
     private String personalIdNumber;  // Особистий номер
     @Column
+    @NotNull(message = "Дата прибуття не може бути пустою")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateOfArrival;  // Прибув дата
     @Column
