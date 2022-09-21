@@ -11,11 +11,9 @@ import java.util.Optional;
 @Service
 public class AttachmentService {
 
-    private final SoldierRepository soldierRepository;
     private final AttachmentRepository attachmentRepository;
 
-    public AttachmentService(SoldierRepository soldierRepository, AttachmentRepository attachmentRepository) {
-        this.soldierRepository = soldierRepository;
+    public AttachmentService(AttachmentRepository attachmentRepository) {
         this.attachmentRepository = attachmentRepository;
     }
 

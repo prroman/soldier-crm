@@ -33,47 +33,45 @@ public class SoldierService {
     }
 
     public Soldier createOrUpdateSoldier(Soldier soldier, MultipartFile file) {
-        if (soldier.getId()  == null) {
+        if (soldier.getId() == null) {
+            soldier = soldierRepository.save(soldier);
+            return soldier;
+        } else {
+            Optional<Soldier> existingSoldier = soldierRepository.findById(soldier.getId());
+            if (existingSoldier.isPresent()) {
+                Soldier newSoldier = existingSoldier.get();
+                newSoldier.setFullName(soldier.getFullName());
+                newSoldier.setVacation(soldier.getVacation());
+                newSoldier.setHospital(soldier.getHospital());
+                newSoldier.setDateOfBirth(soldier.getDateOfBirth());
+                newSoldier.setPhoneNumber(soldier.getPhoneNumber());
+                newSoldier.setBattalion(soldier.getBattalion());
+                newSoldier.setFullTimePosition(soldier.getFullTimePosition());
+                newSoldier.setMilitaryRankName(soldier.getMilitaryRankName());
+                newSoldier.setMilitaryMedicalCommission(soldier.getMilitaryMedicalCommission());
+                newSoldier.setPersonalIdNumber(soldier.getPersonalIdNumber());
+                newSoldier.setDateOfArrival(soldier.getDateOfArrival());
+                newSoldier.setEnrollmentOrderNumber(soldier.getEnrollmentOrderNumber());
+                newSoldier.setOriginBrigadeArrival(soldier.getOriginBrigadeArrival());
+                newSoldier.setInternalOrder(soldier.getInternalOrder());
+                if (file != null) {
+                    try {
+                        Attachment attachment = new Attachment();
+                        attachment.setName(file.getOriginalFilename());
+                        attachment.setType(file.getContentType());
+                        attachment.setData(file.getBytes());
+                        attachmentRepository.save(attachment);
+                        newSoldier.addAttachment(attachment);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                newSoldier = soldierRepository.save(newSoldier);
+                return newSoldier;
+            } else {
                 soldier = soldierRepository.save(soldier);
                 return soldier;
-            } else {
-                Optional<Soldier> existingSoldier = soldierRepository.findById(soldier.getId());
-                if (existingSoldier.isPresent()) {
-                    Soldier newSoldier = existingSoldier.get();
-                    newSoldier.setFullName(soldier.getFullName());
-                    newSoldier.setVacation(soldier.getVacation());
-                    newSoldier.setHospital(soldier.getHospital());
-                    newSoldier.setDateOfBirth(soldier.getDateOfBirth());
-                    newSoldier.setPhoneNumber(soldier.getPhoneNumber());
-                    newSoldier.setBattalion(soldier.getBattalion());
-                    newSoldier.setFullTimePosition(soldier.getFullTimePosition());
-                    newSoldier.setMilitaryRankName(soldier.getMilitaryRankName());
-                    newSoldier.setMilitaryMedicalCommission(soldier.getMilitaryMedicalCommission());
-                    newSoldier.setPersonalIdNumber(soldier.getPersonalIdNumber());
-                    newSoldier.setDateOfArrival(soldier.getDateOfArrival());
-                    newSoldier.setEnrollmentOrderNumber(soldier.getEnrollmentOrderNumber());
-                    newSoldier.setOriginBrigadeArrival(soldier.getOriginBrigadeArrival());
-                    newSoldier.setInternalOrder(soldier.getInternalOrder());
-
-                    if (file != null) {
-                        try {
-                            Attachment attachment = new Attachment();
-                            attachment.setName(file.getOriginalFilename());
-                            attachment.setType(file.getContentType());
-                            attachment.setData(file.getBytes());
-                            attachmentRepository.save(attachment);
-                            newSoldier.addAttachment(attachment);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    newSoldier = soldierRepository.save(newSoldier);
-                    return newSoldier;
-                } else {
-                    soldier = soldierRepository.save(soldier);
-                    return soldier;
-                }
+            }
         }
     }
 

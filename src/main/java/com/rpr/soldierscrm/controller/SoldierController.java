@@ -2,13 +2,19 @@ package com.rpr.soldierscrm.controller;
 
 import com.rpr.soldierscrm.entity.Soldier;
 import com.rpr.soldierscrm.exception.SoldierNotFoundException;
+import com.rpr.soldierscrm.service.ExcelService;
 import com.rpr.soldierscrm.service.SoldierService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.MimeTypeUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Optional;
 
 @Controller
@@ -16,9 +22,11 @@ import java.util.Optional;
 public class SoldierController {
 
     private final SoldierService soldierService;
+    private final ExcelService excelService;
 
-    public SoldierController(SoldierService soldierService) {
+    public SoldierController(SoldierService soldierService, ExcelService excelService) {
         this.soldierService = soldierService;
+        this.excelService = excelService;
     }
 
     @RequestMapping
@@ -39,7 +47,7 @@ public class SoldierController {
     }
 
     @RequestMapping(path = "/delete/{id}")
-    public String deleteEmployeeById(Model model, @PathVariable("id") Long id) throws SoldierNotFoundException {
+    public String deleteEmployeeById(@PathVariable("id") Long id) throws SoldierNotFoundException {
         soldierService.deleteSoldierById(id);
         return "redirect:/";
     }
@@ -48,5 +56,19 @@ public class SoldierController {
     public String createOrUpdateSoldier(Soldier soldier) {
         soldierService.createOrUpdateSoldier(soldier, null);
         return "redirect:/";
+    }
+
+    @GetMapping("/generateExcelReport")
+    public void generateExcelReport(HttpServletResponse resp) throws IOException {
+        byte[] bytes = excelService.generateExcel().toByteArray();
+        resp.setContentType(MimeTypeUtils.APPLICATION_OCTET_STREAM.getType());
+        resp.setHeader("Content-Disposition", "attachment; filename=excelReport.xlsx");
+        resp.setContentLength(bytes.length);
+        OutputStream os = resp.getOutputStream();
+        try {
+            os.write(bytes, 0, bytes.length);
+        } finally {
+            os.close();
+        }
     }
 }

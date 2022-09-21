@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.http.HttpHeaders;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -68,15 +67,5 @@ public class AttachmentController {
     public String delete(@PathVariable("attachmentId") Long attachmentId, @PathVariable("soldierId") Long soldierId) {
         attachmentService.deleteAttachmentById(attachmentId);
         return "redirect:/attachments/" + soldierId;
-    }
-
-    private HttpHeaders headers(String name) {
-        HttpHeaders header = new HttpHeaders();
-        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + name);
-        header.add("Cache-Control", "no-cache, no-store," + " must-revalidate");
-        header.add("Pragma", "no-cache");
-        header.add("Expires", "0");
-        return header;
-
     }
 }
