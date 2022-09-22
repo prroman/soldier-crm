@@ -38,7 +38,7 @@ public class SoldierController {
         return "list-soldiers";
     }
 
-    @RequestMapping(path = {"/edit", "/edit/{id}"})
+    @RequestMapping(path = {"/create", "/edit/{id}"})
     public String editSoldierById(Model model, @PathVariable("id") Optional<Long> id) {
         if (id.isPresent()) {
             Soldier entity = soldierService.getSoldierById(id.get());
