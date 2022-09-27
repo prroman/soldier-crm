@@ -31,7 +31,7 @@ public class Soldier {
     @Column
     private String hospital; // Госпіталь
     @Column
-    @NotNull(message = "Дата народження не може бути пустою")
+    @NotNull(message = "Рік народження не може бути пустим")
     private Integer dateOfBirth; // Рік народження
     @Column
     private String phoneNumber; // Номер телефона

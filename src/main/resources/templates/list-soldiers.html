@@ -13,27 +13,26 @@
     <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
-<nav class="navbar navbar-expand-md bg-light navbar-light">
-
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <a class="navbar-brand" href="#">Центр обліку особового складу</a>
-    <!-- Toggler/collapsibe Button -->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
+            aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
+
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" th:href="@{/}">Список осіб</a>
+                <a class="nav-link" th:href="@{/}">Список осіб<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/create}">Створення нової особи</a>
+                <a class="nav-link" th:href="@{/create}">Додати особу</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Контакт</a>
+                <a class="nav-link" href="#">Допомогти ЗСУ</a>
             </li>
         </ul>
     </div>
-
 </nav>
 <div th:switch="${soldiers}">
     <div class="col-md-10">
