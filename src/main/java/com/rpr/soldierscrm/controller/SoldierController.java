@@ -9,10 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -49,14 +46,14 @@ public class SoldierController {
         return "add-edit-soldier";
     }
 
-    @RequestMapping(path = "/delete/{id}")
+    @PostMapping(path = "/delete/{id}")
     public String deleteEmployeeById(@PathVariable("id") Long id) throws SoldierNotFoundException {
         soldierService.deleteSoldierById(id);
         return "redirect:/";
     }
 
     @RequestMapping(path = "/createSoldier", method = RequestMethod.POST)
-    public String createOrUpdateSoldier(@Valid Soldier soldier, BindingResult result, Model model) {
+    public String createOrUpdateSoldier(@Valid Soldier soldier, BindingResult result) {
         if (result.hasErrors()) {
             return "add-edit-soldier";
         }

@@ -8,6 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" th:src="@{/js/utils.js}"></script>
     <link rel="stylesheet" th:href="@{/css/main.css}">
@@ -120,7 +122,37 @@
                     <td>
                         <a th:href="@{/edit/{id}(id=${soldier.id})}" class="btn btn-primary btn-sm">Редагувати</a>
                         <br/>
-                        <a th:href="@{/delete/{id}(id=${soldier.id})}" class="btn btn-danger btn-sm">Видалити</a>
+                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                th:attr="data-target='#exampleModal'+*{soldier.id}">
+                            Видалити
+                        </button>
+                        <div class="modal fade" th:id="*{'exampleModal'+{soldier.id}}" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Операція видалення</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form th:action="@{/delete/{id}(id=${soldier.id})}" method="post">
+                                            <div class="modal-body">
+                                                <div>Підтвердіть операцію видалення:</div>
+                                                <div>
+                                                    <button type="submit" class="btn btn-danger">Так, видалити</button>
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">
+                                                        Скасувати
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                 </tr>
                 </tbody>
@@ -135,5 +167,8 @@
         </div>
     </div>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 </body>
 </html>
