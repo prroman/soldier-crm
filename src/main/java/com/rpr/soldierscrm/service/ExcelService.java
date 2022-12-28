@@ -1,8 +1,7 @@
 package com.rpr.soldierscrm.service;
 
 import com.rpr.soldierscrm.repository.SoldierRepository;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -11,13 +10,10 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 
 @Service
+@AllArgsConstructor
 public class ExcelService {
 
     private final SoldierRepository soldierRepository;
-
-    public ExcelService(SoldierRepository soldierRepository) {
-        this.soldierRepository = soldierRepository;
-    }
 
     public ByteArrayOutputStream generateExcel() throws IOException {
         XSSFWorkbook workbook = new XSSFWorkbook();

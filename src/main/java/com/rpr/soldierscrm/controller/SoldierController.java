@@ -4,17 +4,18 @@ import com.rpr.soldierscrm.entity.Soldier;
 import com.rpr.soldierscrm.exception.SoldierNotFoundException;
 import com.rpr.soldierscrm.service.ExcelService;
 import com.rpr.soldierscrm.service.SoldierService;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -32,6 +33,19 @@ public class SoldierController {
     @RequestMapping
     public String getAllSoldiers(Model model) {
         model.addAttribute("soldiers", soldierService.getAllSoldiers());
+        return "list-soldiers";
+    }
+
+    @RequestMapping("/pageable")
+    public String getAllSoldiersPageable(Model model) {
+        int currentPage = 1;
+        Page<Soldier> page = soldierService.getSoldiersPageable();
+        List<Soldier> soldierList = page.getContent();
+
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("soldiers", soldierList);
         return "list-soldiers";
     }
 

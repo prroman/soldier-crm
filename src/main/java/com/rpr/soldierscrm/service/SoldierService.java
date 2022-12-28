@@ -5,6 +5,10 @@ import com.rpr.soldierscrm.entity.Soldier;
 import com.rpr.soldierscrm.exception.SoldierNotFoundException;
 import com.rpr.soldierscrm.repository.AttachmentRepository;
 import com.rpr.soldierscrm.repository.SoldierRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,15 +17,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class SoldierService {
 
     private final SoldierRepository soldierRepository;
     private final AttachmentRepository attachmentRepository;
-
-    public SoldierService(SoldierRepository soldierRepository, AttachmentRepository attachmentRepository) {
-        this.soldierRepository = soldierRepository;
-        this.attachmentRepository = attachmentRepository;
-    }
 
     public Soldier getSoldierById(Long id) {
         return soldierRepository.findById(id)
@@ -30,6 +30,11 @@ public class SoldierService {
 
     public List<Soldier> getAllSoldiers() {
         return soldierRepository.findAll();
+    }
+
+    public Page<Soldier> getSoldiersPageable() {
+        Pageable pageable = PageRequest.of(0, 2);
+        return soldierRepository.findAll(pageable);
     }
 
     public Soldier createOrUpdateSoldier(Soldier soldier, MultipartFile file) {

@@ -4,6 +4,7 @@ import com.rpr.soldierscrm.entity.Attachment;
 import com.rpr.soldierscrm.entity.Soldier;
 import com.rpr.soldierscrm.service.AttachmentService;
 import com.rpr.soldierscrm.service.SoldierService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MimeTypeUtils;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;

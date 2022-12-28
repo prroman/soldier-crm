@@ -2,7 +2,6 @@ package com.rpr.soldierscrm.service;
 
 import com.rpr.soldierscrm.entity.Attachment;
 import com.rpr.soldierscrm.repository.AttachmentRepository;
-import com.rpr.soldierscrm.repository.SoldierRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
