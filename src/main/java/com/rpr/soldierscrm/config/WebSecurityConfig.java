@@ -37,9 +37,11 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf().disable().cors();
         http.authorizeHttpRequests(authz -> authz
                 .requestMatchers("/css/**").permitAll()
                 .requestMatchers("/js/**").permitAll()
+                .requestMatchers("/api/**").permitAll()
                 .anyRequest().authenticated())
             .formLogin().loginPage("/login").defaultSuccessUrl("/", true).permitAll();
         http.logout()

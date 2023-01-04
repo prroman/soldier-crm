@@ -1,5 +1,6 @@
 package com.rpr.soldierscrm.service;
 
+import com.rpr.soldierscrm.dto.SearchDto;
 import com.rpr.soldierscrm.entity.Attachment;
 import com.rpr.soldierscrm.entity.Soldier;
 import com.rpr.soldierscrm.exception.SoldierNotFoundException;
@@ -87,5 +88,14 @@ public class SoldierService {
         } else {
             throw new SoldierNotFoundException("No soldier record exist for given id");
         }
+    }
+
+    public Page<Soldier> searchByAllParamsWithPagination(SearchDto searchDto) {
+        Pageable pageable = PageRequest.of(0, 5);
+        return soldierRepository.searchByAllParamsWithPagination(searchDto.getFullName(), searchDto.getVacation(),
+                searchDto.getHospital(), searchDto.getDateOfBirth(),
+                searchDto.getPhoneNumber(), searchDto.getBattalion(),
+                searchDto.getFullTimePosition(), searchDto.getMilitaryRankName(),
+                searchDto.getPersonalIdNumber(), pageable);
     }
 }
