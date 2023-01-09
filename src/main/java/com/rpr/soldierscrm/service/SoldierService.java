@@ -14,8 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -33,8 +35,8 @@ public class SoldierService {
         return soldierRepository.findAll();
     }
 
-    public Page<Soldier> getSoldiersPageable() {
-        Pageable pageable = PageRequest.of(0, 2);
+    public Page<Soldier> getSoldiersPageable(Integer page) {
+        Pageable pageable = PageRequest.of(page - 1, 5);
         return soldierRepository.findAll(pageable);
     }
 
@@ -90,12 +92,16 @@ public class SoldierService {
         }
     }
 
-    public Page<Soldier> searchByAllParamsWithPagination(SearchDto searchDto) {
-        Pageable pageable = PageRequest.of(0, 5);
+    public Page<Soldier> searchByAllParamsWithPagination(SearchDto searchDto, Integer page) throws ParseException {
+        Pageable pageable = PageRequest.of(page - 1, 5);
         return soldierRepository.searchByAllParamsWithPagination(searchDto.getFullName(), searchDto.getVacation(),
                 searchDto.getHospital(), searchDto.getDateOfBirth(),
                 searchDto.getPhoneNumber(), searchDto.getBattalion(),
                 searchDto.getFullTimePosition(), searchDto.getMilitaryRankName(),
-                searchDto.getPersonalIdNumber(), pageable);
+                searchDto.getPersonalIdNumber(), searchDto.formatDateOfArrival(), pageable);
+    }
+
+    public Boolean isNull(Object... args){
+        return Arrays.stream(args).allMatch(Objects::isNull);
     }
 }

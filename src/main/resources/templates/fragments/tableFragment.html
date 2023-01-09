@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <script type="text/javascript" th:src="@{/js/snowstorm.js}"></script>
+</head>
+
+<body>
+<div th:fragment="resultsList" th:unless="${#lists.isEmpty(soldiers)}" class="results-block">
+    <table class="table table-responsive table-striped table-bordered center" id="soldiers-table">
+        <thead class="thead-dark">
+        <tr>
+            <th col-index=1>Прізвище Імя По батькові</th>
+            <th col-index=2>Відпустка</th>
+            <th col-index=3>Госпіталь</th>
+            <th col-index=4>Рік народження</th>
+            <th col-index=5>Номер телефону</th>
+            <th col-index=6>Корпус БАТ</th>
+            <th col-index=7>Посада за штатним розкладом</th>
+            <th col-index=8>Військове звання фактично</th>
+            <th col-index=9>Військова лікарська комісія</th>
+            <th col-index=10>Особистий номер</th>
+            <th col-index=11>Дата прибуття</th>
+            <th col-index=12>Номер наказу на зарахування</th>
+            <th col-index=13>З якої бригади прибув</th>
+            <th col-index=14>Внутрішній наказ</th>
+            <th col-index=15>Дії</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="soldier: ${soldiers}" style="display: table-row">
+            <td th:text="${soldier.fullName}"></td>
+            <td th:text="${soldier.vacation}"></td>
+            <td th:text="${soldier.hospital}"></td>
+            <td th:text="${soldier.dateOfBirth}"></td>
+            <td th:text="${soldier.phoneNumber}"></td>
+            <td th:text="${soldier.battalion}"></td>
+            <td th:text="${soldier.fullTimePosition}"></td>
+            <td th:text="${soldier.militaryRankName}"></td>
+            <td th:text="${soldier.militaryMedicalCommission.getDisplayName}"></td>
+            <td th:text="${soldier.personalIdNumber}"></td>
+            <td th:text="${#dates.format(soldier.dateOfArrival, 'yyyy-MM-dd')}"></td>
+            <td th:text="${soldier.enrollmentOrderNumber}"></td>
+            <td th:text="${soldier.originBrigadeArrival}"></td>
+            <td th:text="${soldier.internalOrder}"></td>
+            <td>
+                <a th:href="@{/edit/{id}(id=${soldier.id})}"
+                   class="btn btn-primary btn-sm">Редагувати</a>
+                <br/>
+                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                        th:attr="data-target='#exampleModal'+*{soldier.id}">
+                    Видалити
+                </button>
+                <div class="modal fade" th:id="*{'exampleModal'+{soldier.id}}" tabindex="-1"
+                     role="dialog"
+                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Операція видалення</h5>
+                                <button type="button" class="close" data-dismiss="modal"
+                                        aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form th:action="@{/delete/{id}(id=${soldier.id})}" method="post">
+                                    <div class="modal-body">
+                                        <div>Підтвердіть операцію видалення:</div>
+                                        <div>
+                                            <button type="submit" class="btn btn-danger">Так, видалити
+                                            </button>
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">
+                                                Скасувати
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div>
+        Всього записів: <span th:text="${totalItems}" th:remove="tag">userName</span>. Сторінка <span th:text="${currentPage}" th:remove="tag"></span> з <span th:text="${totalPages}" th:remove="tag"></span>
+        &nbsp; - &nbsp;
+        <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                    <a th:if="${i != currentPage}" href="javascript:void(0)" th:attr="onclick=|loadFragmentPaginationUrl('${i}')|"><span th:text="${i}">value</span></a>
+                    <span th:unless="${i != currentPage}"><span th:text="${i}">value</span></span>
+        </span>
+    </div>
+</div>
+</body>
+</html>

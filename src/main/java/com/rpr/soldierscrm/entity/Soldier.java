@@ -1,5 +1,6 @@
 package com.rpr.soldierscrm.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -55,12 +56,33 @@ public class Soldier {
     private String originBrigadeArrival;  // з якої бригади прибув
     @Column
     private String internalOrder;  // Внутрінній наказ
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "soldier_id")
+    @JsonIgnore
     private List<Attachment> attachments = new ArrayList<>();
 
     public void addAttachment(Attachment attachment) {
         this.attachments.add(attachment);
+    }
+
+    @Override
+    public String toString() {
+        return "Soldier{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", vacation='" + vacation + '\'' +
+                ", hospital='" + hospital + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", battalion='" + battalion + '\'' +
+                ", fullTimePosition='" + fullTimePosition + '\'' +
+                ", militaryRankName='" + militaryRankName + '\'' +
+                ", militaryMedicalCommission=" + militaryMedicalCommission +
+                ", personalIdNumber='" + personalIdNumber + '\'' +
+                ", dateOfArrival=" + dateOfArrival +
+                ", enrollmentOrderNumber='" + enrollmentOrderNumber + '\'' +
+                ", originBrigadeArrival='" + originBrigadeArrival + '\'' +
+                ", internalOrder='" + internalOrder + '\'' +
+                '}';
     }
 }

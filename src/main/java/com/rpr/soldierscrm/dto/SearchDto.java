@@ -3,8 +3,10 @@ package com.rpr.soldierscrm.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -21,6 +23,12 @@ public class SearchDto {
     String fullTimePosition;
     String militaryRankName;
     String personalIdNumber;
-    Date dateOfArrival;
+    String dateOfArrival;
 
+    public Date formatDateOfArrival() throws ParseException {
+        if (dateOfArrival == null) return null;
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = df.parse(dateOfArrival);
+        return date;
+    }
 }

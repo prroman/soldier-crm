@@ -1,8 +1,11 @@
 const row_style_visible = "table-row";
 const row_style_hidden = "none";
+var defaultUrl = '/api/search?';
+var tempUrl = '';
+
 
 window.onload = () => {
-    this.getUniqueValuesFromColumn();
+
 }
 
 function getTableData() {
@@ -28,70 +31,72 @@ function getTableData() {
     console.log(data);
 }
 
-function getUniqueValuesFromColumn() {
-    let unique_col_values_dict = {};
-    let allFilters = document.querySelectorAll(".table-filter");
-    allFilters.forEach(filter => {
-        let col_index = filter.parentElement.getAttribute("col-index");
-        let rows = document.querySelectorAll("#soldiers-table > tbody > tr");
-        rows.forEach(row => {
-            let cell_value = row.querySelector("td:nth-child(" + col_index + ")").innerHTML;
-            if (col_index in unique_col_values_dict) {
-                if (!unique_col_values_dict[col_index].includes(cell_value)) {
-                    unique_col_values_dict[col_index].push(cell_value);
-                }
-            } else {
-                unique_col_values_dict[col_index] = new Array(cell_value);
-            }
-        })
-    });
-    this.updateSelectOptions(unique_col_values_dict);
-}
-
-function updateSelectOptions(unique_col_values_dict) {
-    let allFilters = document.querySelectorAll(".table-filter");
-    allFilters.forEach(filter => {
-        let col_index = filter.parentElement.getAttribute('col-index');
-        unique_col_values_dict[col_index].forEach(i => {
-            filter.innerHTML = filter.innerHTML + `\n<option value="${i}">${i}</option>`;
-        });
-    });
-}
-
-function filter_rows() {
-    let allFilters = document.querySelectorAll(".table-filter");
-    let filter_value_dict = {};
-    allFilters.forEach(filter => {
-        let col_index = filter.parentElement.getAttribute('col-index');
-        let value = filter.value.toLowerCase();
-        if (value !== "all") {
-            filter_value_dict[col_index] = value;
-        }
-    });
-    let col_cell_value_dict = {};
-    let rows = document.querySelectorAll("#soldiers-table tbody tr");
-    rows.forEach(row => {
-        let display_row = true;
-        allFilters.forEach(filter => {
-            let col_index = filter.parentElement.getAttribute('col-index');
-            col_cell_value_dict[col_index] = row.querySelector("td:nth-child(" + col_index + ")").innerHTML;
-        });
-        for (let col_i in filter_value_dict) {
-            let filter_value = filter_value_dict[col_i];
-            let row_cell_value = col_cell_value_dict[col_i].toLowerCase();
-            if (!row_cell_value.includes(filter_value) && filter_value !== "all") {
-                display_row = false;
-                break;
-            }
-        }
-        row.style.display = display_row === true ? row_style_visible : row_style_hidden;
-    });
-}
-
 function clearAllFilters() {
     let allFilters = document.querySelectorAll(".table-filter");
     allFilters.forEach(filter => {
         filter.value = "";
     });
-    filter_rows();
+    performSearch();
+}
+
+function performSearch() {
+	var url = defaultUrl;
+	if ($('#searchFullName').val() != '') {
+		url = url + '&fullName=' + encodeURIComponent($('#searchFullName').val());
+	}
+	if ($('#searchVacation').val() != '') {
+    	url = url + '&vacation=' + encodeURIComponent($('#searchVacation').val());
+    }
+    if ($('#searchHospital').val() != '') {
+        url = url + '&hospital=' + encodeURIComponent($('#searchHospital').val());
+    }
+    if ($('#searchDateOfBirth').val() != '') {
+        url = url + '&dateOfBirth=' + encodeURIComponent($('#searchDateOfBirth').val());
+    }
+    if ($('#searchPhoneNumber').val() != '') {
+        url = url + '&phoneNumber=' + encodeURIComponent($('#searchPhoneNumber').val());
+    }
+    if ($('#searchBattalion').val() != '') {
+        url = url + '&battalion=' + encodeURIComponent($('#searchBattalion').val());
+    }
+    if ($('#searchFullTimePosition').val() != '') {
+        url = url + '&fullTimePosition=' + encodeURIComponent($('#searchFullTimePosition').val());
+    }
+/*    if ($('#searchMilitaryRankName').val() != '') {
+        url = url + '&militaryRankName=' + encodeURIComponent($('#searchMilitaryRankName').val());
+    }
+    if ($('#searchMilitaryMedicalCommission').val() != '') {
+        url = url + '&militaryMedicalCommission=' + encodeURIComponent($('#searchMilitaryMedicalCommission').val());
+    }*/
+    if ($('#searchPersonalIdNumber').val() != '') {
+        url = url + '&personalIdNumber=' + encodeURIComponent($('#searchPersonalIdNumber').val());
+    }
+    if ($('#searchDateOfArrival').val() != '') {
+        url = url + '&dateOfArrival=' + encodeURIComponent($('#searchDateOfArrival').val());
+    }
+    if ($('#searchEnrollmentOrderNumber').val() != '') {
+        url = url + '&enrollmentOrderNumber=' + encodeURIComponent($('#searchEnrollmentOrderNumber').val());
+    }
+    if ($('#searchOriginBrigadeArrival').val() != '') {
+        url = url + '&originBrigadeArrival=' + encodeURIComponent($('#searchOriginBrigadeArrival').val());
+    }
+    if ($('#searchInternalOrder').val() != '') {
+        url = url + '&internalOrder=' + encodeURIComponent($('#searchInternalOrder').val());
+    }
+	this.tempUrl = url;
+	console.log(url);
+	$("#resultsBlock").load(url);
+}
+
+function loadFragmentPaginationUrl(pageNum) {
+    var targetPaginationUrl = this.tempUrl;
+    targetPaginationUrl = !targetPaginationUrl.includes('?')
+                ? targetPaginationUrl + '?page=' + pageNum
+                : targetPaginationUrl + '&page=' + pageNum;
+    $("#resultsBlock").load(targetPaginationUrl);
+}
+
+function showHideFilters() {
+    var tableFiltersDiv = document.getElementById('filtersPanel');
+    tableFiltersDiv = tableFiltersDiv.style.display === 'none' ? tableFiltersDiv.style.display = 'block' : tableFiltersDiv.style.display = 'none';
 }

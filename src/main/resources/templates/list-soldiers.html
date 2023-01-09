@@ -12,6 +12,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" th:src="@{/js/utils.js}"></script>
+    <script type="text/javascript" th:src="@{/js/snowstorm.js}"></script>
     <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 
@@ -44,145 +45,186 @@
     </div>
 </nav>
 
-<div th:switch="${soldiers}">
-    <div class="col-md-10">
-        <h2 th:case="null">No record found !!</h2>
-        <div th:case="*">
-            </br>
-            <h3>Список осіб</h3>
-            <br/>
-            <table class="table table-striped table-bordered center" id="soldiers-table">
-                <thead class="thead-dark">
-                <tr>
-                    <th col-index=1>Прізвище Імя По батькові
-                        <input class="table-filter" type="text" style="width: 90px" th:onchange="filter_rows()">
-                    </th>
-                    <th col-index=2>Відпустка
-                        <input class="table-filter" type="text" style="width: 90px" th:onchange="filter_rows()">
-                    </th>
-                    <th col-index=3>Госпіталь
-                        <input class="table-filter" type="text" style="width: 90px" th:onchange="filter_rows()">
-                    </th>
-                    <th col-index=4>Рік народження
-                        <input class="table-filter" type="number" min="1950" max="2099" step="1" style="width: 90px"
-                               th:onchange="filter_rows()"/>
-                    </th>
-                    <th col-index=5>Номер телефону
-                        <input class="table-filter" type="text" style="width: 90px" th:onchange="filter_rows()">
-                    </th>
-                    <th col-index=6>Корпус БАТ
-                        <input class="table-filter" type="text" style="width: 90px" th:onchange="filter_rows()">
-                    </th>
-                    <th col-index=7>Посада за штатним розкладом
-                        <input class="table-filter" type="text" style="width: 90px" th:onchange="filter_rows()">
-                    </th>
-                    <th col-index=8>Військове звання фактично
-                        <select class="table-filter" name="keyword" style="width: 90px" th:onchange="filter_rows()">
-                            <option value="all">All</option>
-                        </select>
-                    </th>
-                    <th col-index=9>Військова лікарська комісія
-                        <select class="table-filter" name="keyword" style="width: 90px" th:onchange="filter_rows()">
-                            <option value="all">All</option>
-                        </select>
-                    </th>
-                    <th col-index=10>Особистий номер
-                        <input class="table-filter" type="text" style="width: 90px" th:onchange="filter_rows()">
-                    </th>
-                    <th col-index=11>Дата прибуття
-                        <input class="table-filter" type="date" min="2022-01-01" max="2099-12-31"
-                               th:onchange="filter_rows()">
-                    </th>
-                    <th col-index=12>Номер наказу на зарахування
-                        <input class="table-filter" type="text" style="width: 90px" th:onchange="filter_rows()">
-                    </th>
-                    <th col-index=13>З якої бригади прибув
-                        <select class="table-filter" name="keyword" style="width: 90px" th:onchange="filter_rows()">
-                            <option value="all">All</option>
-                        </select>
-                    </th>
-                    <th col-index=14>Внутрішній наказ
-                        <input class="table-filter" type="text" style="width: 90px" th:onchange="filter_rows()">
-                    </th>
-                    <th>
-                        <button type="button" class="btn btn-primary btn-sm" th:onclick="clearAllFilters()">Скинути
-                            фільтри
+<div class="container-fluid my-5">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <h3>Список осіб</h3>
+        <div class="card">
+            <div class="card-body">
+                <div th:switch="${soldiers}">
+                    <h2 th:case="null">No record found !!</h2>
+                    <div th:case="*">
+                        <form class="form-inline">
+                            <div id="filtersPanel" class="col-xs-2">
+                                <input type="fullNameSearch" class="form-control table-filter input-sm" id="searchFullName"
+                                       aria-describedby="emailHelp" placeholder="Filter by fullName"
+                                       th:onchange="performSearch()">
+                                <input type="vacationSearch" class="form-control table-filter input-sm" id="searchVacation"
+                                       aria-describedby="emailHelp" placeholder="Filter by vacation"
+                                       th:onchange="performSearch()">
+                                <input type="hospitalSearch" class="form-control table-filter input-sm" id="searchHospital"
+                                       aria-describedby="emailHelp" placeholder="Filter by hospital"
+                                       th:onchange="performSearch()">
+                                <input type="number" min="1950" max="2099" step="1" class="form-control table-filter input-sm" id="searchDateOfBirth"
+                                       aria-describedby="emailHelp" placeholder="Filter by date of birth"
+                                       th:onchange="performSearch()">
+                                <input type="email" class="form-control table-filter input-sm" id="searchPhoneNumber"
+                                       aria-describedby="emailHelp" placeholder="Filter by phone number"
+                                       th:onchange="performSearch()">
+                                <input type="email" class="form-control table-filter input-sm" id="searchBattalion"
+                                       aria-describedby="emailHelp" placeholder="Filter by battalion"
+                                       th:onchange="performSearch()">
+                                <input type="email" class="form-control table-filter input-sm"
+                                       id="searchFullTimePosition" aria-describedby="emailHelp"
+                                       placeholder="Filter by full time position" th:onchange="performSearch()">
+                                <select class="form-control table-filter input-sm" name="keyword" style="width: 90px" th:onchange="performSearch()" id="searchMilitaryRankName">
+                                    <option disabled>Please select...</option>
+                                </select>
+                                <select class="form-control table-filter input-sm" name="keyword" style="width: 90px" th:onchange="performSearch()" id="searchMilitaryMedicalCommission">
+                                    <option disabled>Please select...</option>
+                                </select>
+                                <input type="email" class="form-control table-filter input-sm"
+                                       id="searchPersonalIdNumber" aria-describedby="emailHelp"
+                                       placeholder="Filter by personal ID number" th:onchange="performSearch()">
+                                <input class="form-control table-filter input-sm" type="date" min="2022-01-01" max="2099-12-31" id="searchDateOfArrival"
+                                       th:onchange="performSearch()">
+                                <input type="email" class="form-control table-filter input-sm"
+                                       id="searchEnrollmentOrderNumber" aria-describedby="emailHelp"
+                                       placeholder="Filter by enrollment order number" th:onchange="performSearch()">
+                                <input type="email" class="form-control table-filter input-sm"
+                                       id="searchOriginBrigadeArrival" aria-describedby="emailHelp"
+                                       placeholder="Filter by origin brigade arrival" th:onchange="performSearch()">
+                                <input type="email" class="form-control table-filter input-sm" id="searchInternalOrder"
+                                       aria-describedby="emailHelp" placeholder="Filter by internal order"
+                                       th:onchange="performSearch()">
+                                <button id="searchButton" class="form-control" name="searchButton"
+                                        th:onclick="clearAllFilters()" type="button">Clear all filters
+                                </button>
+                            </div>
+                        </form>
+                        <button id="showHideFiltersButton" class="form-control" name="showHideFiltersButton"
+                                th:onclick="showHideFilters()" type="button">Show/Hide Filters
                         </button>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="soldier: ${soldiers}" style="display: table-row">
-                    <td th:text="${soldier.fullName}"></td>
-                    <td th:text="${soldier.vacation}"></td>
-                    <td th:text="${soldier.hospital}"></td>
-                    <td th:text="${soldier.dateOfBirth}"></td>
-                    <td th:text="${soldier.phoneNumber}"></td>
-                    <td th:text="${soldier.battalion}"></td>
-                    <td th:text="${soldier.fullTimePosition}"></td>
-                    <td th:text="${soldier.militaryRankName}"></td>
-                    <td th:text="${soldier.militaryMedicalCommission.getDisplayName}"></td>
-                    <td th:text="${soldier.personalIdNumber}"></td>
-                    <td th:text="${#dates.format(soldier.dateOfArrival, 'yyyy-MM-dd')}"></td>
-                    <td th:text="${soldier.enrollmentOrderNumber}"></td>
-                    <td th:text="${soldier.originBrigadeArrival}"></td>
-                    <td th:text="${soldier.internalOrder}"></td>
-                    <td>
-                        <a th:href="@{/edit/{id}(id=${soldier.id})}" class="btn btn-primary btn-sm">Редагувати</a>
-                        <br/>
-                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                th:attr="data-target='#exampleModal'+*{soldier.id}">
-                            Видалити
-                        </button>
-                        <div class="modal fade" th:id="*{'exampleModal'+{soldier.id}}" tabindex="-1" role="dialog"
-                             aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Операція видалення</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
+                        <br>
+                        <div id="resultsBlock">
+                            <table class="table table-responsive table-striped table-bordered center"
+                                   id="soldiers-table">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th>Прізвище Імя По батькові</th>
+                                    <th>Відпустка</th>
+                                    <th>Госпіталь</th>
+                                    <th>Рік народження</th>
+                                    <th>Номер телефону</th>
+                                    <th>Корпус БАТ</th>
+                                    <th>Посада за штатним розкладом</th>
+                                    <th>Військове звання фактично</th>
+                                    <th>Військова лікарська комісія</th>
+                                    <th>Особистий номер</th>
+                                    <th>Дата прибуття</th>
+                                    <th>Номер наказу на зарахування</th>
+                                    <th>З якої бригади прибув</th>
+                                    <th>Внутрішній наказ</th>
+                                    <th>Дії</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="soldier: ${soldiers}" style="display: table-row">
+                                    <td th:text="${soldier.fullName}"></td>
+                                    <td th:text="${soldier.vacation}"></td>
+                                    <td th:text="${soldier.hospital}"></td>
+                                    <td th:text="${soldier.dateOfBirth}"></td>
+                                    <td th:text="${soldier.phoneNumber}"></td>
+                                    <td th:text="${soldier.battalion}"></td>
+                                    <td th:text="${soldier.fullTimePosition}"></td>
+                                    <td th:text="${soldier.militaryRankName}"></td>
+                                    <td th:text="${soldier.militaryMedicalCommission.getDisplayName}"></td>
+                                    <td th:text="${soldier.personalIdNumber}"></td>
+                                    <td th:text="${#dates.format(soldier.dateOfArrival, 'yyyy-MM-dd')}"></td>
+                                    <td th:text="${soldier.enrollmentOrderNumber}"></td>
+                                    <td th:text="${soldier.originBrigadeArrival}"></td>
+                                    <td th:text="${soldier.internalOrder}"></td>
+                                    <td>
+                                        <a th:href="@{/edit/{id}(id=${soldier.id})}"
+                                           class="btn btn-primary btn-sm">Редагувати</a>
+                                        <br/>
+                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                                th:attr="data-target='#exampleModal'+*{soldier.id}">
+                                            Видалити
                                         </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form th:action="@{/delete/{id}(id=${soldier.id})}" method="post">
-                                            <div class="modal-body">
-                                                <div>Підтвердіть операцію видалення:</div>
-                                                <div>
-                                                    <button type="submit" class="btn btn-danger">Так, видалити</button>
-                                                    <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">
-                                                        Скасувати
-                                                    </button>
+                                        <div class="modal fade" th:id="*{'exampleModal'+{soldier.id}}" tabindex="-1"
+                                             role="dialog"
+                                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Операція
+                                                            видалення</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form th:action="@{/delete/{id}(id=${soldier.id})}"
+                                                              method="post">
+                                                            <div class="modal-body">
+                                                                <div>Підтвердіть операцію видалення:</div>
+                                                                <div>
+                                                                    <button type="submit" class="btn btn-danger">Так,
+                                                                        видалити
+                                                                    </button>
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                            data-dismiss="modal">
+                                                                        Скасувати
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </form>
-                                    </div>
-                                </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <div>
+                                Всього записів: <span th:text="${totalItems}" th:remove="tag">userName</span>. Сторінка
+                                <span th:text="${currentPage}" th:remove="tag"></span> з <span th:text="${totalPages}"
+                                                                                               th:remove="tag"></span>
+                                &nbsp; - &nbsp;
+                                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                                <a th:if="${i != currentPage}" th:href="@{'/?page=' + ${i}}"><span
+                                        th:text="${i}">value</span></a>
+                                <span th:unless="${i != currentPage}"><span th:text="${i}">value</span></span>
+                            </span>
                             </div>
                         </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-<!--            <div>
-                Total items: <span th:text="${totalItems}" th:remove="tag">userName</span>. Page <span th:text="${currentPage}" th:remove="tag"></span> of <span th:text="${totalPages}" th:remove="tag"></span>
-                &nbsp;
-
-                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-                    <span th:text="${i}" th:remove="tag"></span> &nbsp;
-                </span>
-            </div>-->
-            <button class="btn btn-primary" type="button" th:onclick="getTableData()">Console table data to Object
-            </button>
-            <p>
-                <a th:href="@{/generateExcelReport}">
-                    <button type="button" class="btn btn-primary">Excel Report</button>
-                </a>
-            </p>
+                    </div>
+                </div>
+                <button class="btn btn-primary" type="button" th:onclick="getTableData()">Console table data to
+                    Object
+                </button>
+                <p>
+                    <a th:href="@{/generateExcelReport}">
+                        <button type="button" class="btn btn-primary">Excel Report</button>
+                    </a>
+                </p>
+            </div>
         </div>
     </div>
 </div>
+<footer class="py-3 my-4">
+    <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+    </ul>
+    <p class="text-center text-muted">&copy; 2023 Company, Inc</p>
+</footer>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>

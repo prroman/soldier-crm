@@ -1,11 +1,13 @@
 package com.rpr.soldierscrm.controller;
 
+import com.rpr.soldierscrm.dto.SearchDto;
 import com.rpr.soldierscrm.entity.Soldier;
 import com.rpr.soldierscrm.exception.SoldierNotFoundException;
 import com.rpr.soldierscrm.service.ExcelService;
 import com.rpr.soldierscrm.service.SoldierService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,37 +17,26 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
+import java.text.ParseException;
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
+@RequiredArgsConstructor
 public class SoldierController {
 
     private final SoldierService soldierService;
     private final ExcelService excelService;
+    private static final String RESULTS_FRAGMENT = "fragments/tableFragment :: resultsList";
 
-    public SoldierController(SoldierService soldierService, ExcelService excelService) {
-        this.soldierService = soldierService;
-        this.excelService = excelService;
-    }
 
-    @RequestMapping
-    public String getAllSoldiers(Model model) {
-        model.addAttribute("soldiers", soldierService.getAllSoldiers());
-        return "list-soldiers";
-    }
-
-    @RequestMapping("/pageable")
-    public String getAllSoldiersPageable(Model model) {
-        int currentPage = 1;
-        Page<Soldier> page = soldierService.getSoldiersPageable();
-        List<Soldier> soldierList = page.getContent();
-
-        model.addAttribute("currentPage", currentPage);
+    @RequestMapping("/")
+    public String newPageable(@RequestParam(name = "page", defaultValue = "1", required = false) Integer pageNum, Model model) {
+        Page<Soldier> page = soldierService.getSoldiersPageable(pageNum);
+        model.addAttribute("currentPage", pageNum);
         model.addAttribute("totalItems", page.getTotalElements());
         model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("soldiers", soldierList);
+        model.addAttribute("soldiers", page.getContent());
         return "list-soldiers";
     }
 
@@ -87,5 +78,35 @@ public class SoldierController {
         } finally {
             os.close();
         }
+    }
+
+    @RequestMapping(value = "/api/search", method = RequestMethod.GET)
+    public String searchByAllParamsWithPagination(@RequestParam(name = "fullName", required = false) String fullName,
+                                                  @RequestParam(name = "vacation", required = false) String vacation,
+                                                  @RequestParam(name = "hospital", required = false) String hospital,
+                                                  @RequestParam(name = "dateOfBirth", required = false) Integer dateOfBirth,
+                                                  @RequestParam(name = "phoneNumber", required = false) String phoneNumber,
+                                                  @RequestParam(name = "battalion", required = false) String battalion,
+                                                  @RequestParam(name = "fullTimePosition", required = false) String fullTimePosition,
+                                                  @RequestParam(name = "militaryRankName", required = false) String militaryRankName,
+                                                  @RequestParam(name = "personalIdNumber", required = false) String personalIdNumber,
+                                                  @RequestParam(name = "dateOfArrival", required = false) String dateOfArrival,
+                                                  @RequestParam(name = "page", required = false, defaultValue = "1") Integer pageNum, Model model) throws ParseException {
+        SearchDto searchRequest = new SearchDto(fullName, vacation, hospital, dateOfBirth, phoneNumber,
+                battalion, fullTimePosition, militaryRankName, personalIdNumber, dateOfArrival);
+
+        Boolean allParamsAreNull = soldierService.isNull(fullName, vacation, hospital, dateOfBirth, phoneNumber,
+                battalion, fullTimePosition, militaryRankName, personalIdNumber, dateOfArrival);
+
+        Page<Soldier> soldiersPage = allParamsAreNull
+                ? soldierService.getSoldiersPageable(pageNum)
+                : soldierService.searchByAllParamsWithPagination(searchRequest, pageNum);
+
+        model.addAttribute("soldiers", soldiersPage.getContent());
+        model.addAttribute("totalItems", soldiersPage.getTotalElements());
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", soldiersPage.getTotalPages());
+        model.addAttribute("urlParams", soldiersPage.getContent());
+        return RESULTS_FRAGMENT;
     }
 }

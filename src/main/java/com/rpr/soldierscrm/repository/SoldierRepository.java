@@ -21,11 +21,12 @@ public interface SoldierRepository extends JpaRepository<Soldier, Long> {
             "and (:battalion is null or u.battalion like %:battalion%) " +
             "and (:fullTimePosition is null or u.fullTimePosition like %:fullTimePosition%) " +
             "and (:militaryRankName is null or u.militaryRankName like %:militaryRankName%) " +
-            "and (:personalIdNumber is null or u.personalIdNumber like %:personalIdNumber%)")
+            "and (:personalIdNumber is null or u.personalIdNumber like %:personalIdNumber%) " +
+            "and (:dateOfArrival is null or u.dateOfArrival = :dateOfArrival)")
     Page<Soldier> searchByAllParamsWithPagination(@Param("fullName") String fullName, @Param("vacation") String vacation,
                                                   @Param("hospital") String hospital, @Param("dateOfBirth") Integer dateOfBirth,
                                                   @Param("phoneNumber") String phoneNumber, @Param("battalion") String battalion,
                                                   @Param("fullTimePosition") String fullTimePosition, @Param("militaryRankName") String militaryRankName,
-                                                  @Param("personalIdNumber") String personalIdNumber,
+                                                  @Param("personalIdNumber") String personalIdNumber, @Param("dateOfArrival") Date dateOfArrival,
                                                   Pageable pageable);
 }
