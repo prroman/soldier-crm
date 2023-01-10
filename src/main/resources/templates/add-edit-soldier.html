@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Додати солдата</title>
+    <title>Military Personnel Management - Personnel Data</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
@@ -14,11 +14,12 @@
     <script type="text/javascript" th:src="@{/js/utils.js}"></script>
     <script type="text/javascript" th:src="@{/js/snowstorm.js}"></script>
     <link rel="stylesheet" th:href="@{/css/main.css}">
+    <script id="help-ukraine-win" async="true" th:src="@{/js/helpUkraine.js?type=four&position=top-right&layout=main}"></script>
 </head>
 
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" href="#">Центр обліку особового складу</a>
+    <a class="navbar-brand" href="#">Military Personnel Management</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
             aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -27,13 +28,13 @@
     <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/}">Список осіб</a>
+                <a class="nav-link" th:href="@{/}">Personnel List<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" th:href="@{/create}">Додати особу</a>
+                <a class="nav-link" th:href="@{/create}">Add New Person</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/donate}">Допомогти ЗСУ</a>
+                <a class="nav-link" th:href="@{/donate}">Support the Armed Forces of Ukraine</a>
             </li>
             <div sec:authorize="isAuthenticated()">
                 <li class="nav-item">
@@ -45,31 +46,31 @@
     </div>
 </nav>
 <div class="container my-5">
-    <h3>Дані особи</h3>
+    <h3>Personnel data</h3>
     <div class="card">
         <div class="card-body">
             <div class="col-md-10">
                 <form action="#" th:action="@{/createSoldier}" th:object="${soldier}" method="post">
                     <div class="row">
                         <div class="form-group col-md-8">
-                            <label class="col-form-label">Прізвище Імя По батькові</label>
+                            <label class="col-form-label">Full Name</label>
                             <input type="text" th:field="*{fullName}" class="form-control"
                                    id="fullName" placeholder="Повне імя"/>
                             <p th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"
                                class="alert alert-danger">
                         </div>
                         <div class="form-group col-md-8">
-                            <label class="col-form-label">Відпустка</label>
+                            <label class="col-form-label">Vacation</label>
                             <input type="text" th:field="*{vacation}" class="form-control"
                                    id="vacation" placeholder=""/>
                         </div>
                         <div class="form-group col-md-8">
-                            <label class="col-form-label">Госпіталь</label>
+                            <label class="col-form-label">Hospital</label>
                             <input type="text" th:field="*{hospital}" class="form-control"
                                    id="hospital" placeholder=""/>
                         </div>
                         <div class="form-group col-md-8">
-                            <label class="col-form-label">Рік народження</label>
+                            <label class="col-form-label">Year Of Birth</label>
                             <input type="number" min="1950" max="2099" step="1" th:field="*{dateOfBirth}"
                                    class="form-control"
                                    id="dateOfBirth" placeholder=""/>
@@ -77,27 +78,27 @@
                                class="alert alert-danger">
                         </div>
                         <div class="form-group col-md-8">
-                            <label class="col-form-label">Номер телефону</label>
+                            <label class="col-form-label">Phone Number</label>
                             <input type="text" th:field="*{phoneNumber}" class="form-control"
                                    id="phoneNumber" placeholder=""/>
                         </div>
                         <div class="form-group col-md-8">
-                            <label class="col-form-label">Корпус БАТ</label>
+                            <label class="col-form-label">Battalion</label>
                             <input type="text" th:field="*{battalion}" class="form-control"
                                    id="battalion" placeholder=""/>
                         </div>
                         <div class="form-group col-md-8">
-                            <label class="col-form-label">Посада за штатним розкладом</label>
+                            <label class="col-form-label">Full Time Position</label>
                             <input type="text" th:field="*{fullTimePosition}" class="form-control"
                                    id="fullTimePosition" placeholder=""/>
                         </div>
                         <div class="form-group col-md-8">
-                            <label class="col-form-label">Військове звання фактично</label>
+                            <label class="col-form-label">Military Rank Name</label>
                             <input type="text" th:field="*{militaryRankName}" class="form-control"
                                    id="militaryRankName" placeholder=""/>
                         </div>
                         <div class="form-group col-md-8">
-                            <label class="col-form-label">Військова лікарська комісія</label>
+                            <label class="col-form-label">Military Medical Commission</label>
                             <select name="militaryMedicalCommission" class="form-control"
                                     id="militaryMedicalCommission">
                                 <option th:each="option : ${T(com.rpr.soldierscrm.entity.MilitaryMedicalCommission).values()}"
@@ -107,12 +108,12 @@
                             </select>
                         </div>
                         <div class="form-group col-md-8">
-                            <label class="col-form-label">Особистий номер</label>
+                            <label class="col-form-label">Personal ID Number</label>
                             <input type="text" th:field="*{personalIdNumber}" class="form-control"
                                    id="personalIdNumber" placeholder=""/>
                         </div>
                         <div class="form-group col-md-8">
-                            <label class="col-form-label">Дата прибуття</label>
+                            <label class="col-form-label">Date Of Arrival</label>
                             <input type="date" min="2022-01-01" max="2099-12-31" th:field="*{dateOfArrival}"
                                    class="form-control"
                                    id="dateOfArrival" placeholder=""/>
@@ -120,31 +121,31 @@
                                class="alert alert-danger">
                         </div>
                         <div class="form-group col-md-8">
-                            <label class="col-form-label">Номер наказу на зарахування</label>
+                            <label class="col-form-label">Enrollment Order Number</label>
                             <input type="text" th:field="*{enrollmentOrderNumber}" class="form-control"
                                    id="enrollmentOrderNumber" placeholder=""/>
                         </div>
                         <div class="form-group col-md-8">
-                            <label class="col-form-label">З якої бригади прибув</label>
+                            <label class="col-form-label">Origin Brigade Arrival</label>
                             <input type="text" th:field="*{originBrigadeArrival}" class="form-control"
                                    id="originBrigadeArrival" placeholder=""/>
                         </div>
                         <div class="form-group col-md-8">
-                            <label class="col-form-label">Внутрішній наказ</label>
+                            <label class="col-form-label">Internal Order</label>
                             <input type="text" th:field="*{internalOrder}" class="form-control" id="internalOrder"
                                    placeholder=""/>
                         </div>
                         <div class="form-group col-md-8" th:switch="*{id}">
                             <h2 th:case="null"></h2>
                             <div th:case="*">
-                                <label class="col-form-label">Повязані документи</label>
+                                <label class="col-form-label">Related Documents</label>
                                 <p><a th:href="@{/attachments/{soldierId}(soldierId=*{id})}">
-                                    <button type="button" class="btn btn-success btn-sm">Повязані документи</button>
+                                    <button type="button" class="btn btn-success btn-sm">Related Documents</button>
                                 </a></p>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <input type="submit" class="btn btn-primary" value=" Зберегти ">
+                            <input type="submit" class="btn btn-primary" value=" Save ">
                         </div>
 
                         <input type="hidden" id="id" th:field="*{id}">

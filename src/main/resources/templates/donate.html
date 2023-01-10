@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Допомогти ЗСУ</title>
+    <title>Military Personnel Management - Support the Armed Forces of Ukraine</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
@@ -13,10 +13,11 @@
     <script type="text/javascript" th:src="@{/js/utils.js}"></script>
     <script type="text/javascript" th:src="@{/js/snowstorm.js}"></script>
     <link rel="stylesheet" th:href="@{/css/main.css}">
+    <script id="help-ukraine-win" async="true" th:src="@{/js/helpUkraine.js?type=four&position=top-right&layout=main}"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" href="#">Центр обліку особового складу</a>
+    <a class="navbar-brand" href="#">Military Personnel Management</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
             aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -25,13 +26,13 @@
     <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/}">Список осіб</a>
+                <a class="nav-link" th:href="@{/}">Personnel List<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/create}">Додати особу</a>
+                <a class="nav-link" th:href="@{/create}">Add New Person</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" th:href="@{/donate}">Допомогти ЗСУ</a>
+                <a class="nav-link" th:href="@{/donate}">Support the Armed Forces of Ukraine</a>
             </li>
             <div sec:authorize="isAuthenticated()">
                 <li class="nav-item">
@@ -44,7 +45,7 @@
 </nav>
 
 <div class="container my-5">
-    <h3>Підтримати ЗСУ</h3>
+    <h3>Support the Armed Forces of Ukraine</h3>
     <div class="card">
         <div class="card-body">
             <h3 class="card-title">Переказати на рахунок | Account information</h3>

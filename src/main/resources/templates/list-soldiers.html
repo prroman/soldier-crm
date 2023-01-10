@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Список солдатів</title>
+    <title>Military Personnel Management - Personnel List</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
@@ -14,11 +14,12 @@
     <script type="text/javascript" th:src="@{/js/utils.js}"></script>
     <script type="text/javascript" th:src="@{/js/snowstorm.js}"></script>
     <link rel="stylesheet" th:href="@{/css/main.css}">
+    <script id="help-ukraine-win" async="true" th:src="@{/js/helpUkraine.js?type=four&position=top-right&layout=main}"></script>
 </head>
 
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" href="#">Центр обліку особового складу</a>
+    <a class="navbar-brand" href="#">Military Personnel Management</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
             aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -27,13 +28,13 @@
     <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" th:href="@{/}">Список осіб<span class="sr-only">(current)</span></a>
+                <a class="nav-link" th:href="@{/}">Personnel List<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/create}">Додати особу</a>
+                <a class="nav-link" th:href="@{/create}">Add New Person</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/donate}">Допомогти ЗСУ</a>
+                <a class="nav-link" th:href="@{/donate}">Support the Armed Forces of Ukraine</a>
             </li>
             <div sec:authorize="isAuthenticated()">
                 <li class="nav-item">
@@ -47,7 +48,7 @@
 
 <div class="container-fluid my-5">
     <div class="col-lg-12 grid-margin stretch-card">
-        <h3>Список осіб</h3>
+        <h3>Personnel List</h3>
         <div class="card">
             <div class="card-body">
                 <div th:switch="${soldiers}">
@@ -114,21 +115,21 @@
                                    id="soldiers-table">
                                 <thead class="thead-dark">
                                 <tr>
-                                    <th>Прізвище Імя По батькові</th>
-                                    <th>Відпустка</th>
-                                    <th>Госпіталь</th>
-                                    <th>Рік народження</th>
-                                    <th>Номер телефону</th>
-                                    <th>Корпус БАТ</th>
-                                    <th>Посада за штатним розкладом</th>
-                                    <th>Військове звання фактично</th>
-                                    <th>Військова лікарська комісія</th>
-                                    <th>Особистий номер</th>
-                                    <th>Дата прибуття</th>
-                                    <th>Номер наказу на зарахування</th>
-                                    <th>З якої бригади прибув</th>
-                                    <th>Внутрішній наказ</th>
-                                    <th>Дії</th>
+                                    <th>Full Name</th>
+                                    <th>Vacation</th>
+                                    <th>Hospital</th>
+                                    <th>Year Of Birth</th>
+                                    <th>Phone Number</th>
+                                    <th>Battalion</th>
+                                    <th>Full Time Position</th>
+                                    <th>Military Rank Name</th>
+                                    <th>Military Medical Commission</th>
+                                    <th>Personal ID Number</th>
+                                    <th>Date Of Arrival</th>
+                                    <th>Enrollment Number</th>
+                                    <th>Origin Brigade Arrival</th>
+                                    <th>Internal Order</th>
+                                    <th>Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -149,11 +150,11 @@
                                     <td th:text="${soldier.internalOrder}"></td>
                                     <td>
                                         <a th:href="@{/edit/{id}(id=${soldier.id})}"
-                                           class="btn btn-primary btn-sm">Редагувати</a>
+                                           class="btn btn-primary btn-sm">Edit</a>
                                         <br/>
                                         <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                                 th:attr="data-target='#exampleModal'+*{soldier.id}">
-                                            Видалити
+                                            Delete
                                         </button>
                                         <div class="modal fade" th:id="*{'exampleModal'+{soldier.id}}" tabindex="-1"
                                              role="dialog"
@@ -161,8 +162,7 @@
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Операція
-                                                            видалення</h5>
+                                                        <h5 class="modal-title" id="exampleModalLabel">Delete operation</h5>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                                 aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
@@ -172,14 +172,13 @@
                                                         <form th:action="@{/delete/{id}(id=${soldier.id})}"
                                                               method="post">
                                                             <div class="modal-body">
-                                                                <div>Підтвердіть операцію видалення:</div>
+                                                                <div>Confirm delete operation:</div>
                                                                 <div>
-                                                                    <button type="submit" class="btn btn-danger">Так,
-                                                                        видалити
+                                                                    <button type="submit" class="btn btn-danger">Yes, delete
                                                                     </button>
                                                                     <button type="button" class="btn btn-secondary"
                                                                             data-dismiss="modal">
-                                                                        Скасувати
+                                                                        Cancel
                                                                     </button>
                                                                 </div>
                                                             </div>
@@ -194,8 +193,8 @@
                             </table>
 
                             <div>
-                                Всього записів: <span th:text="${totalItems}" th:remove="tag">userName</span>. Сторінка
-                                <span th:text="${currentPage}" th:remove="tag"></span> з <span th:text="${totalPages}"
+                                Total items: <span th:text="${totalItems}" th:remove="tag">userName</span>. Page
+                                <span th:text="${currentPage}" th:remove="tag"></span> of <span th:text="${totalPages}"
                                                                                                th:remove="tag"></span>
                                 &nbsp; - &nbsp;
                                 <span th:each="i: ${#numbers.sequence(1, totalPages)}">

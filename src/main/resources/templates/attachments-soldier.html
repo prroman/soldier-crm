@@ -2,16 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title>Повязані документи</title>
+    <title>Military Personnel Management - Related Documents</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
     <script type="text/javascript" th:src="@{/js/snowstorm.js}"></script>
+    <script id="help-ukraine-win" async="true" th:src="@{/js/helpUkraine.js?type=four&position=top-right&layout=main}"></script>
 </head>
 
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" href="#">Центр обліку особового складу</a>
+    <a class="navbar-brand" href="#">Military Personnel Management</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
             aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -20,13 +21,13 @@
     <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/}">Список осіб</a>
+                <a class="nav-link" th:href="@{/}">Personnel List<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/create}">Додати особу</a>
+                <a class="nav-link" th:href="@{/create}">Add New Person</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="@{/donate}">Допомогти ЗСУ</a>
+                <a class="nav-link" th:href="@{/donate}">Support the Armed Forces of Ukraine</a>
             </li>
             <div sec:authorize="isAuthenticated()">
                 <li class="nav-item">
@@ -37,19 +38,19 @@
         <a class="nav-link" th:href="@{/logout}">Logout</a>
     </div>
 </nav>
-<h3 style="text-align: center;">Повязані документи - <span th:text="${soldier.fullName}" th:remove="tag">userName</span></h3>
+<h3 style="text-align: center;">Related Documents - <span th:text="${soldier.fullName}" th:remove="tag">userName</span></h3>
 <div class="container my-5">
     <form method="POST" th:action="@{/attachments/upload/{soldierId}(soldierId=${soldier.id})}" enctype="multipart/form-data">
 
             <input name="file" type="file" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-            <input class="btn btn-primary" type="submit" value="Завантажити"/>
+            <input class="btn btn-primary" type="submit" value="Upload"/>
 
     </form>
     <table class="table table-striped table-bordered center" id="soldiers-table">
         <thead class="thead-dark">
         <tr>
-            <th>Назва файлу</th>
-            <th>Тип</th>
+            <th>File Name</th>
+            <th>Type</th>
             <th>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                      class="bi bi-download" viewBox="0 0 16 16">
@@ -72,11 +73,11 @@
             <td th:text="${elem.name}"></td>
             <td th:text="${elem.type}"></td>
             <td><a th:href="@{/attachments/download/{attachmentId}(attachmentId=${elem.id})}">
-                <button type="button" class="btn btn-success btn-sm">Завантажити</button></a>
+                <button type="button" class="btn btn-success btn-sm">&nbsp;Download&nbsp;</button></a>
             </td>
             <td>
                 <form method="POST" th:action="@{/attachments/delete/{attachmentId}/{soldierId}(attachmentId=${elem.id}, soldierId=${soldier.id})}">
-                    <button type="submit" class="btn btn-danger btn-sm">&nbsp;Видалити&nbsp;</button>
+                    <button type="submit" class="btn btn-danger btn-sm">&nbsp;Delete&nbsp;</button>
                 </form>
             </td>
         </tr>
