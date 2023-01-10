@@ -1,5 +1,6 @@
 package com.rpr.soldierscrm.dto;
 
+import com.rpr.soldierscrm.entity.MilitaryMedicalCommission;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,13 +23,13 @@ public class SearchDto {
     String battalion;
     String fullTimePosition;
     String militaryRankName;
+    MilitaryMedicalCommission militaryMedicalCommission;
     String personalIdNumber;
     String dateOfArrival;
 
     public Date formatDateOfArrival() throws ParseException {
         if (dateOfArrival == null) return null;
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = df.parse(dateOfArrival);
-        return date;
+        return df.parse(dateOfArrival);
     }
 }

@@ -1,6 +1,7 @@
 package com.rpr.soldierscrm.controller;
 
 import com.rpr.soldierscrm.dto.SearchDto;
+import com.rpr.soldierscrm.entity.MilitaryMedicalCommission;
 import com.rpr.soldierscrm.entity.Soldier;
 import com.rpr.soldierscrm.exception.SoldierNotFoundException;
 import com.rpr.soldierscrm.service.ExcelService;
@@ -89,14 +90,15 @@ public class SoldierController {
                                                   @RequestParam(name = "battalion", required = false) String battalion,
                                                   @RequestParam(name = "fullTimePosition", required = false) String fullTimePosition,
                                                   @RequestParam(name = "militaryRankName", required = false) String militaryRankName,
+                                                  @RequestParam(name = "militaryMedicalCommission", required = false) MilitaryMedicalCommission militaryMedicalCommission,
                                                   @RequestParam(name = "personalIdNumber", required = false) String personalIdNumber,
                                                   @RequestParam(name = "dateOfArrival", required = false) String dateOfArrival,
                                                   @RequestParam(name = "page", required = false, defaultValue = "1") Integer pageNum, Model model) throws ParseException {
         SearchDto searchRequest = new SearchDto(fullName, vacation, hospital, dateOfBirth, phoneNumber,
-                battalion, fullTimePosition, militaryRankName, personalIdNumber, dateOfArrival);
+                battalion, fullTimePosition, militaryRankName, militaryMedicalCommission, personalIdNumber, dateOfArrival);
 
         Boolean allParamsAreNull = soldierService.isNull(fullName, vacation, hospital, dateOfBirth, phoneNumber,
-                battalion, fullTimePosition, militaryRankName, personalIdNumber, dateOfArrival);
+                battalion, fullTimePosition, militaryRankName, personalIdNumber, dateOfArrival, militaryMedicalCommission);
 
         Page<Soldier> soldiersPage = allParamsAreNull
                 ? soldierService.getSoldiersPageable(pageNum)

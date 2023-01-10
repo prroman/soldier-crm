@@ -15,4 +15,5 @@ public enum MilitaryMedicalCommission {
     public String getDisplayName() {
         return displayName;
     }
+
 }

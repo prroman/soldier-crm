@@ -2,6 +2,7 @@ package com.rpr.soldierscrm.service;
 
 import com.rpr.soldierscrm.dto.SearchDto;
 import com.rpr.soldierscrm.entity.Attachment;
+import com.rpr.soldierscrm.entity.MilitaryMedicalCommission;
 import com.rpr.soldierscrm.entity.Soldier;
 import com.rpr.soldierscrm.exception.SoldierNotFoundException;
 import com.rpr.soldierscrm.repository.AttachmentRepository;
@@ -98,7 +99,8 @@ public class SoldierService {
                 searchDto.getHospital(), searchDto.getDateOfBirth(),
                 searchDto.getPhoneNumber(), searchDto.getBattalion(),
                 searchDto.getFullTimePosition(), searchDto.getMilitaryRankName(),
-                searchDto.getPersonalIdNumber(), searchDto.formatDateOfArrival(), pageable);
+                searchDto.getPersonalIdNumber(), searchDto.formatDateOfArrival(),
+                searchDto.getMilitaryMedicalCommission(), pageable);
     }
 
     public Boolean isNull(Object... args){

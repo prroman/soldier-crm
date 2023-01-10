@@ -76,11 +76,15 @@
                                 <input type="email" class="form-control table-filter input-sm"
                                        id="searchFullTimePosition" aria-describedby="emailHelp"
                                        placeholder="Filter by full time position" th:onchange="performSearch()">
-                                <select class="form-control table-filter input-sm" name="keyword" style="width: 90px" th:onchange="performSearch()" id="searchMilitaryRankName">
-                                    <option disabled>Please select...</option>
-                                </select>
-                                <select class="form-control table-filter input-sm" name="keyword" style="width: 90px" th:onchange="performSearch()" id="searchMilitaryMedicalCommission">
-                                    <option disabled>Please select...</option>
+                                <input type="email" class="form-control table-filter input-sm"
+                                       id="searchMilitaryRankName" aria-describedby="emailHelp"
+                                       placeholder="Filter by military Rank Name" th:onchange="performSearch()">
+                                <select class="form-control input-sm" name="keyword" style="width: 90px" th:onchange="performSearch()" id="searchMilitaryMedicalCommission">
+                                    <option selected>---</option>
+                                    <option th:each="option : ${T(com.rpr.soldierscrm.entity.MilitaryMedicalCommission).values()}"
+                                            th:text="${option.getDisplayName}"
+                                            th:value="${option}"
+                                            />
                                 </select>
                                 <input type="email" class="form-control table-filter input-sm"
                                        id="searchPersonalIdNumber" aria-describedby="emailHelp"

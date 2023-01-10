@@ -2,6 +2,9 @@ const row_style_visible = "table-row";
 const row_style_hidden = "none";
 var defaultUrl = '/api/search?';
 var tempUrl = '';
+var filterNames = ['#searchFullName', '#searchVacation', '#searchHospital', '#searchDateOfBirth', '#searchPhoneNumber',
+'#searchBattalion', '#searchFullTimePosition', '#searchPersonalIdNumber', '#searchDateOfArrival', '#searchEnrollmentOrderNumber',
+'#searchOriginBrigadeArrival', '#searchInternalOrder', '#searchMilitaryRankName'];
 
 
 window.onload = () => {
@@ -32,59 +35,22 @@ function getTableData() {
 }
 
 function clearAllFilters() {
+    //clear text, date, number inputs
     let allFilters = document.querySelectorAll(".table-filter");
     allFilters.forEach(filter => {
         filter.value = "";
     });
+    //clear select inputs
+    $('#searchMilitaryMedicalCommission').prop('selectedIndex', 0);
     performSearch();
 }
 
 function performSearch() {
-	var url = defaultUrl;
-	if ($('#searchFullName').val() != '') {
-		url = url + '&fullName=' + encodeURIComponent($('#searchFullName').val());
-	}
-	if ($('#searchVacation').val() != '') {
-    	url = url + '&vacation=' + encodeURIComponent($('#searchVacation').val());
-    }
-    if ($('#searchHospital').val() != '') {
-        url = url + '&hospital=' + encodeURIComponent($('#searchHospital').val());
-    }
-    if ($('#searchDateOfBirth').val() != '') {
-        url = url + '&dateOfBirth=' + encodeURIComponent($('#searchDateOfBirth').val());
-    }
-    if ($('#searchPhoneNumber').val() != '') {
-        url = url + '&phoneNumber=' + encodeURIComponent($('#searchPhoneNumber').val());
-    }
-    if ($('#searchBattalion').val() != '') {
-        url = url + '&battalion=' + encodeURIComponent($('#searchBattalion').val());
-    }
-    if ($('#searchFullTimePosition').val() != '') {
-        url = url + '&fullTimePosition=' + encodeURIComponent($('#searchFullTimePosition').val());
-    }
-/*    if ($('#searchMilitaryRankName').val() != '') {
-        url = url + '&militaryRankName=' + encodeURIComponent($('#searchMilitaryRankName').val());
-    }
-    if ($('#searchMilitaryMedicalCommission').val() != '') {
-        url = url + '&militaryMedicalCommission=' + encodeURIComponent($('#searchMilitaryMedicalCommission').val());
-    }*/
-    if ($('#searchPersonalIdNumber').val() != '') {
-        url = url + '&personalIdNumber=' + encodeURIComponent($('#searchPersonalIdNumber').val());
-    }
-    if ($('#searchDateOfArrival').val() != '') {
-        url = url + '&dateOfArrival=' + encodeURIComponent($('#searchDateOfArrival').val());
-    }
-    if ($('#searchEnrollmentOrderNumber').val() != '') {
-        url = url + '&enrollmentOrderNumber=' + encodeURIComponent($('#searchEnrollmentOrderNumber').val());
-    }
-    if ($('#searchOriginBrigadeArrival').val() != '') {
-        url = url + '&originBrigadeArrival=' + encodeURIComponent($('#searchOriginBrigadeArrival').val());
-    }
-    if ($('#searchInternalOrder').val() != '') {
-        url = url + '&internalOrder=' + encodeURIComponent($('#searchInternalOrder').val());
+	var url = buildUrlForTextInputs();
+    if ($('#searchMilitaryMedicalCommission').find(":selected").val() != '---') {
+        url = url + '&militaryMedicalCommission=' + encodeURIComponent($('#searchMilitaryMedicalCommission').find(":selected").val());
     }
 	this.tempUrl = url;
-	console.log(url);
 	$("#resultsBlock").load(url);
 }
 
@@ -99,4 +65,15 @@ function loadFragmentPaginationUrl(pageNum) {
 function showHideFilters() {
     var tableFiltersDiv = document.getElementById('filtersPanel');
     tableFiltersDiv = tableFiltersDiv.style.display === 'none' ? tableFiltersDiv.style.display = 'block' : tableFiltersDiv.style.display = 'none';
+}
+
+function buildUrlForTextInputs() {
+    var url = defaultUrl;
+    for (var i = 0; i < filterNames.length; i++) {
+        if ($(filterNames[i]).val() != '') {
+            url = url + '&' + filterNames[i].slice(7).at(0).toLowerCase() + filterNames[i].slice(8) +
+            '=' + encodeURIComponent($(filterNames[i]).val());
+        }
+    }
+    return url;
 }
